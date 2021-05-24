@@ -308,3 +308,113 @@ void PrintGraph(GraphType* h)
     }
 }
 
+
+int FindVertex(GraphType* h, int edgekey)
+{
+    for (int i = 0; i < h->vn; i++) //현재 정점의 수만큼 반복
+    {
+        if (h->adj_list[i].vertex == edgekey) //만약 h->adj_list[i]의 vertex의 값이 edgekey와 같다면
+        {
+            return i; //인덱스값을 반환
+        }
+    }
+    return -1;
+}
+void sort(GraphNode* n1, GraphType* h, int v)
+{
+    GraphNode* cur = h->adj_list[v].link; //cur을 h->adj_list[v]의 link로 초기화
+    GraphNode* stocur = NULL;
+    if (h->adj_list[v].link == NULL) //만약 h->adj_list[v]의 링크값이 NULL이라면(adj_list[v]의 다음 노드가 존재하지 않는다면)
+    {
+        h->adj_list[v].link = n1; //h->adj_list[v]의 link가 n1을 가리키게함
+        return;
+    }
+    else if (cur->vertex > n1->vertex) // 만약 cur의 정점의 값이 n1의 정점의 값보다 크다면
+    {
+        n1->link = cur; //n1의 link값이 cur을 가리키게함
+        h->adj_list[v].link = n1; //h->adj_list[v]의 link값이 n1을 가리키게함
+        return;
+    }
+    while (cur != NULL) //cur이 NULL이 아닐때까지 반복
+    {
+        if (cur->vertex > n1->vertex) //만약 cur의 정점의 값이 n1의 정점의 값보다 크다면
+        {
+            stocur->link = n1; //stocur(cur의 이전 노드)의 link값이 n1을 가리키게함
+            n1->link = cur; // n1의 link값이 cur을 가리키게함
+            return;
+
+        }
+        stocur = cur; //stocur은 cur이 됨
+        cur = cur->link; //cur은 cur->link로 이동
+
+    }
+    //n1의 vertex값보다 큰 값이 존재하지 않는 경우
+    n1->link = cur; //n1의 link값은 cur을 가리킴
+    stocur->link = n1; //stocur의 link값은 n1을 가리킴
+}
+
+
+
+
+void init_visited()
+{
+    //visited배열의 값들을 전부 FALSE로 초기화시킴
+    int x;
+    for (x = 0; x < MAX_VTX; x++)
+    {
+        visited[x] = FALSE;
+    }
+}
+
+int deQueue()
+{
+    if (front == rear && rear == -1) //만약 front와 rear이 같은 값이고 rear이 -1일 이라면 즉, 빈 queue이라면 경고문구를 출력
+    {
+        printf("Queue is Empty");
+        return NULL;
+    }
+    else
+    {
+        front = front + 1; //fornt를 1증가 후
+        return queue[front]; //queue[front]를 리턴
+    }
+
+}
+
+void enQueue(int q)
+{
+    if (rear == MAX_VTX) //rear이 정해놓은 큐의 크기라면, 즉 큐가 가득 찼다면 경고문구를 출력
+    {
+        printf("Queue is Full");
+    }
+
+    else
+    {
+        rear = rear + 1; //rear을 1증가 후
+        queue[rear] = q; //queue[rear]에 q를 삽입
+    }
+
+}
+
+void freegraph(GraphType** h)
+{
+    int n;
+    GraphNode* cur = (*h)->adj_list; //cur을 *h->adj_list로 설정
+    GraphNode* cur1 = NULL;
+    GraphNode* cur2 = NULL;
+    for (n = 0; n < MAX_VTX; n++) //MAX_VTX의 값만큼 반복
+    {
+        cur1 = cur[n].link; // cur1을 cur[n].link 값으로 설정
+        while (cur1 != NULL) // cur1의 값이 NULL 이 될때까지 반복
+        {
+            cur2 = cur1; //cur2를 cur1로 설정
+            cur1 = cur1->link; //cur1을 cur1->link 노드로 이동
+            free(cur2); //cur2를 해제
+        }
+        free(cur1); //cur1을 해제
+    }
+
+    free(*h); //*h를 해제
+    (*h) = NULL;
+}
+
