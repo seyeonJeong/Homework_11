@@ -228,3 +228,83 @@ void DFS_Graph(GraphType* h, int u)
 
 }
 
+void bfs_list(GraphType* h, int v)
+{
+    //변수 선언 및 초기화
+    int u1 = 0;
+    int u2 = 0;
+    u1 = FindVertex(h, v); //  FindVertex함수를 이용하여 v의 값에 해당하는 인덱스 번호를 설정
+    GraphNode* cur, * cur1 = NULL; //GraphNode를 카리키는 포인터 변수를 생성 후 초기화
+    cur = h->adj_list; //cur에 h->adj_list를 설정
+
+    init_queue(); // queue를 초기화해줌
+    //탐색 시작
+    visited[u1] = TRUE; //인덱스가 u1에 해당하는 visited의 값을 TRUE로 설정
+
+
+    printf("%d ", cur[u1].vertex); //cur[u1]의 정점의 ㄱ밧을 출력
+    printf("\n");
+    enQueue(u1); //u1을 큐에 삽입
+    while (u2 != -9999) //u2가 -9999, 즉 큐에 값이 없을 경우 종료
+    {
+
+        u2 = deQueue(); //u2는 큐의 첫번째 값
+
+        if (u2 != -9999)  //u2가 -9999가 아니라면 (값이 존재한다면)
+        {
+            for (cur1 = cur[u2].link; cur1; cur1 = cur1->link) //cur1은 cur[u2]의 link에 해당하는 노드가 되고 cur1이 NULL값이 되면 종료
+            {
+                u2 = FindVertex(h, cur1->vertex); //u2는 cur1의 정점이 존재하는 adj_list의 인덱스값이 된다.
+                if (visited[u2] != TRUE) // u2에 해당하는 인덱스번호에 접근하지 않았다면
+                {
+                    visited[u2] = TRUE; //visited[u2]의 값을 TRUE로 변경하여 방문하였다는 표시를 해줌
+                    printf("%d ", cur[u2].vertex); //cur[u2]의 정점의 값을 출력
+                    printf("\n");
+                    enQueue(u2);//u2를 큐에 삽입
+
+                }
+
+            }
+        }
+
+
+    }
+}
+
+void init_queue()
+{
+    //큐를 초기화 해주는 함수 초기값을 -9999로 설정해준다
+    int x = 0;
+    rear = front = -1;
+    for (x; x < MAX_VTX; x++)
+    {
+        queue[x] = -9999;
+    }
+}
+
+void PrintGraph(GraphType* h)
+{
+    //변수 선언
+    int i = 0;
+    GraphNode* cur = NULL;
+    GraphNode* cur1 = NULL;
+    if (h->adj_list[0].vertex == -9999)
+    {
+        //만약 배열의 첫번째 vertex가 -9999라면 배열의 값이 존재하지 않으므로 경고문구를 출력
+        printf("그래프가 비어있습니다.\n");
+        return;
+    }
+    cur = h->adj_list; //cur을 h->adj_list로 설정
+    for (i; i < (h->vn); i++) //현재 정점의 개수만큼 반복
+    {
+        printf("%d -> ", cur[i].vertex); //cur[i]의 정점의 값을 출력
+        cur1 = cur[i].link; //cur1은 cur[i]의 link가 가리키는 노드가 됨
+        while (cur1) //cur1이 NULL이 될때까지 반복
+        {
+            printf("  %d  ", cur1->vertex); //cur1의 vertex값을 출력한후
+            cur1 = cur1->link; //cur1을 cur1의 link값으로 설정
+        }
+        printf("\n");
+    }
+}
+
