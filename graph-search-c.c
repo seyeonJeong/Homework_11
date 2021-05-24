@@ -118,3 +118,50 @@ int main()
     return 1;
 }
 
+int InitializeGraph(GraphType** h)
+{
+    int i;
+    *h = (GraphType*)malloc(sizeof(GraphType)); //포인터 h에 동적할당을 해준다
+    (*h)->vn = 0; //포인터h의 정점의 수를 0으로 만들어줌
+    for (i = 0; i < MAX_VTX; i++)
+    {
+        //adj_list의 vertex와 link를 초기화해준다.
+        (*h)->adj_list[i].vertex = -9999;
+        (*h)->adj_list[i].link = NULL;
+    }
+    //visited배열의 값을 모두 FALSE로 설정
+    for (int x = 0; x < MAX_VTX; x++)
+    {
+        visited[x] = FALSE;
+    }
+
+    return h;
+}
+
+
+void InsertVertex(GraphType* h, int key)
+{
+    if ((h->vn) + 1 > MAX_VTX) //만약 정점의 수가 설정된 최대 정점의 수보다 크다면 경고문구를 출력
+    {
+        printf("더이상 vertex를 생성할 수 없습니다!\n");
+        return;
+    }
+    if (key >= MAX_VTX)
+    {
+        printf("key값 오류! \n");
+        return;
+    }
+    for (int i = 0; i < h->vn; i++) //현재 정점의 수만큼 반복
+    {
+        if (h->adj_list[i].vertex == key) //만약 adj_list[i]의 정점의 값이 key값과 같다면
+        {
+            //중복이므로 return을 해준다
+            return;
+        }
+    }
+    h->adj_list[h->vn].vertex = key; // 현재 정점의 번호에 해당하는 인덱스의 vertex를 key로 설정
+    h->adj_list[h->vn].link = NULL; // 현재 정점의 번호에 해당하는  인덱스의 link를 NULL로 설정
+    h->vn = (h->vn) + 1; //정점의 번호에 1을 더해준다
+}
+
+
