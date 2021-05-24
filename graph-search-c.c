@@ -66,7 +66,8 @@ int main()
         printf("----------------------------------------------------------------\n");
 
         printf("Command = ");
-        scanf_s(" %c", &command);
+        fflush(stdout);
+        scanf(" %c", &command);
 
         switch (command) {
         case 'z': case 'Z':
@@ -74,29 +75,34 @@ int main()
             break;
         case 'v': case 'V':
             printf("vertex의 값을 입력하시오 : ");
-            scanf_s("%d", &key);
+            fflush(stdout);
+            scanf("%d", &key);
             InsertVertex(h, key);
             break;
         case 'e': case 'E':
             printf("vertex를 선택하시오 :");
-            scanf_s("%d", &edgekey1);
+            fflush(stdout);
+            scanf("%d", &edgekey1);
             printf("\n");
             printf("연결할 vertex를 선택하시오 : ");
-            scanf_s("%d", &edgekey2);
+            fflush(stdout);
+            scanf("%d", &edgekey2);
             printf("\n");
 
             InsertEdge(h, edgekey1, edgekey2);
             break;
         case 'd': case 'D':
             printf("첫번째 vertex를 고르세요 : ");
-            scanf_s("%d", &key2);
+            fflush(stdout);
+            scanf("%d", &key2);
             u = key2;
             DFS_Graph(h, u);
             init_visited();
             break;
         case 'b': case 'B':
             printf("첫번째 vertex를 고르세요 : ");
-            scanf_s("%d", &key3);
+            fflush(stdout);
+            scanf("%d", &key3);
             v = key3;
             bfs_list(h, v);
             init_visited();
@@ -169,7 +175,7 @@ void InsertEdge(GraphType* h, int edgekey1, int edgekey2)
     //필요한 변수 정의
     short int a = 0;
     int v1, v2 = 0;
-    GraphNode* node1, * node2;
+    GraphNode* node1, * node2,*cur ,*cur1;
 
 
     for (int i = 0; i < h->vn; i++)
@@ -187,6 +193,7 @@ void InsertEdge(GraphType* h, int edgekey1, int edgekey2)
         //정점이 없습니다.
         return;
     }
+
     //FindVertex함수를 이용하여 v1과 v2에 해당 인덱스 번호를 받아옴
     v1 = FindVertex(h, edgekey1);
     v2 = FindVertex(h, edgekey2);
